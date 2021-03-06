@@ -1,0 +1,74 @@
+--- configure.ac.orig	2021-03-06 11:30:26.000000000 +0300
++++ configure.ac	2021-03-06 11:31:38.000000000 +0300
+@@ -15,7 +15,7 @@
+ 
+ AX_CXX_COMPILE_STDCXX([14], [noext])
+ AX_CHECK_COMPILE_FLAG([-Wall], [CXXFLAGS="${CXXFLAGS} -Wall"])
+-AX_CHECK_COMPILE_FLAG([-Werror], [CXXFLAGS="${CXXFLAGS} -Werror"])
++#AX_CHECK_COMPILE_FLAG([-Werror], [CXXFLAGS="${CXXFLAGS} -Werror"])
+ AX_CHECK_COMPILE_FLAG([-pedantic], [CXXFLAGS="${CXXFLAGS} -pedantic"])
+ AX_CHECK_COMPILE_FLAG([-Wno-deprecated],
+                       [CXXFLAGS="${CXXFLAGS} -Wno-deprecated"])
+@@ -38,7 +38,7 @@
+ AX_PKG_CHECK_MODULES([CURL], [libcurl], [])
+ AX_PKG_CHECK_MODULES([SQLITE3], [sqlite3], [],
+   [SQLITE3_CFLAGS="${SQLITE3_CFLAGS} -DSQLITE_ENABLE_SESSION -DSQLITE_ENABLE_PREUPDATE_HOOK"])
+-AX_PKG_CHECK_MODULES([LMDB], [lmdb], [])
++#AX_PKG_CHECK_MODULES([LMDB], [lmdb], [])
+ AX_PKG_CHECK_MODULES([PROTOBUF], [protobuf])
+ AX_PKG_CHECK_MODULES([GLOG], [libglog])
+ 
+--- ships/coord.hpp.orig	2021-03-06 11:30:26.000000000 +0300
++++ ships/coord.hpp	2021-03-06 14:08:13.000000000 +0300
+@@ -59,7 +59,7 @@
+   /** The size of the board (side length).  */
+   static constexpr int SIDE = 8;
+   /** The size of the board in total number of cells.  */
+-  static constexpr int CELLS = std::pow (SIDE, 2);
++  static constexpr int CELLS = 64; //std::pow (SIDE, 2);
+ 
+   Coord () = default;
+   Coord (const Coord&) = default;
+--- xayagame/rest.hpp.orig	2021-03-06 11:30:26.000000000 +0300
++++ xayagame/rest.hpp	2021-03-06 14:01:50.000000000 +0300
+@@ -38,7 +38,7 @@
+   /**
+    * Request handler function for MHD.
+    */
+-  static int RequestCallback (void* data, struct MHD_Connection* conn,
++  static MHD_Result RequestCallback (void* data, struct MHD_Connection* conn,
+                               const char* url, const char* method,
+                               const char* version,
+                               const char* upload, size_t* uploadSize,
+--- xayagame/rest.cpp.orig	2021-03-06 11:30:26.000000000 +0300
++++ xayagame/rest.cpp	2021-03-06 14:02:44.000000000 +0300
+@@ -211,7 +211,7 @@
+ 
+ } // anonymous namespace
+ 
+-int
++MHD_Result
+ RestApi::RequestCallback (void* data, struct MHD_Connection* conn,
+                           const char* url, const char* method,
+                           const char* version,
+@@ -238,7 +238,7 @@
+       resp.Set (code, "text/plain", msg);
+     }
+ 
+-  return resp.Queue (conn);
++  return (MHD_Result)resp.Queue (conn);
+ }
+ 
+ void
+--- xayagame/Makefile.am.orig	2021-03-06 11:30:26.000000000 +0300
++++ xayagame/Makefile.am	2021-03-06 14:03:54.000000000 +0300
+@@ -27,8 +27,7 @@
+   $(OPENSSL_LIBS) \
+   $(JSONCPP_LIBS) $(JSONRPCCLIENT_LIBS) $(JSONRPCSERVER_LIBS) \
+   $(ZLIB_LIBS) $(CURL_LIBS) $(MHD_LIBS) \
+-  $(GLOG_LIBS) $(SQLITE3_LIBS) $(LMDB_LIBS) $(ZMQ_LIBS) \
+-  -lstdc++fs
++  $(GLOG_LIBS) $(SQLITE3_LIBS) $(LMDB_LIBS) $(ZMQ_LIBS)
+ libxayagame_la_SOURCES = \
+   defaultmain.cpp \
+   game.cpp \
