@@ -47,3 +47,13 @@ ExternalProject_Add(charon
     UPDATE_COMMAND ""
     DEPENDS xayagame;xid;gloox
   )
+ExternalProject_Add(xmppbroadcast
+    GIT_REPOSITORY "https://github.com/xaya/xmppbroadcast.git"
+    GIT_TAG 776385ca9a2a318e36df72847d749af38dda9d53
+    INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+    BUILD_IN_SOURCE 1
+    CONFIGURE_COMMAND autoreconf -if <SOURCE_DIR> && <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} XAYAGAME_CFLAGS=-I/usr/local/include XAYAGAME_LIBS=-lxayagame GAMECHANNEL_CFLAGS=-I/usr/local/include GAMECHANNEL_LIBS=-lgamechannel CHARON_CFLAGS=-I/usr/local/include CHARON_LIBS=-lcharon XAYAUTIL_CFLAGS=-I/usr/local/include XAYAUTIL_LIBS=-lxayautil OPENSSL_CFLAGS=-I/usr/local/opt/openssl@1.1/include OPENSSL_LIBS="-L/usr/local/opt/openssl@1.1/lib -lssl -lcrypto"
+    BUILD_COMMAND make V=1 CXXFLAGS=-I/usr/local/opt/sqlite/include LDFLAGS=-L/usr/local/opt/sqlite/lib
+    UPDATE_COMMAND ""
+    DEPENDS xayagame;xid;gloox
+  )
