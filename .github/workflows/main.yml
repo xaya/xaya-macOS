@@ -12,7 +12,7 @@ jobs:
       - name: Install dependencies
         run: |
           brew tap vitalyster/homebrew-header-only
-          brew install autoconf autoconf-archive automake libtool libjson-rpc-cpp jsoncpp cppzmq lmdb glog gflags googletest protobuf openssl sqlite gloox
+          brew install autoconf autoconf-archive automake libtool libjson-rpc-cpp jsoncpp cppzmq lmdb glog gflags googletest protobuf openssl sqlite
           brew link --force sqlite
       - name: Configure
         run: cmake .

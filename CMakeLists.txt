@@ -29,6 +29,14 @@ ExternalProject_Add(xid
     UPDATE_COMMAND ""
     DEPENDS xayagame
   )
+ExternalProject_Add(gloox
+    URL "https://camaya.net/download/gloox-1.0.24.tar.bz2"
+    URL_HASH SHA256=ae1462be2a2eb8fe5cd054825143617c53c2c9c7195606cb5a5ba68c0f68f9c9
+    INSTALL_DIR ${CMAKE_INSTALL_PREFIX}
+    CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} --disable-getaddrinfo
+    BUILD_COMMAND ${MAKE_EXE}
+    UPDATE_COMMAND ""
+  )
 ExternalProject_Add(charon
     GIT_REPOSITORY "https://github.com/xaya/charon.git"
     GIT_TAG 04910b475f642bf574950d753309ed6fc44ba0f4
@@ -37,5 +45,5 @@ ExternalProject_Add(charon
     CONFIGURE_COMMAND autoreconf -if <SOURCE_DIR> && <SOURCE_DIR>/configure --prefix=${CMAKE_INSTALL_PREFIX} XAYAGAME_CFLAGS=-I/usr/local/include XAYAGAME_LIBS=-lxayagame XAYAUTIL_CFLAGS=-I/usr/local/include XAYAUTIL_LIBS=-lxayautil OPENSSL_CFLAGS=-I/usr/local/opt/openssl@1.1/include OPENSSL_LIBS="-L/usr/local/opt/openssl@1.1/lib -lssl -lcrypto"
     BUILD_COMMAND make V=1 CXXFLAGS=-I/usr/local/opt/sqlite/include LDFLAGS=-L/usr/local/opt/sqlite/lib
     UPDATE_COMMAND ""
-    DEPENDS xayagame;xid
+    DEPENDS xayagame;xid;gloox
   )
